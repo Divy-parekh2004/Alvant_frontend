@@ -1,0 +1,192 @@
+/* HERO */
+.contact-hero {
+  height: 80vh;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.contact-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.contact-hero-content {
+  position: relative;
+  z-index: 1;
+  color: white;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 20px;
+}
+
+/* CONTACT SECTION */
+.contact-section {
+  padding: 100px 0;
+  background: #f8fafc;
+}
+
+.contact-container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 0 clamp(20px, 6vw, 80px);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+}
+
+/* INFO */
+.contact-info h2 {
+  font-size: 2.2rem;
+  margin-bottom: 20px;
+}
+
+.contact-info p {
+  margin-bottom: 30px;
+  line-height: 1.8;
+}
+
+.info-item {
+  margin-bottom: 15px;
+}
+
+.info-item strong {
+  display: block;
+}
+
+/* FORM */
+.contact-form {
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.contact-form h2 {
+  margin-bottom: 25px;
+}
+
+.form-row {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.optional {
+  font-weight: 400;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.req {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  transition: border-color 0.2s;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: #0f172a;
+}
+
+.contact-form input.error,
+.contact-form textarea.error {
+  border-color: #dc2626;
+}
+
+.field-error {
+  color: #dc2626;
+  margin-top: 6px;
+  font-size: 13px;
+  display: block;
+}
+
+.contact-form textarea {
+  height: 120px;
+  resize: none;
+}
+
+/* CHECKBOX SECTION */
+.checkbox-group {
+  border: none;
+  margin-bottom: 20px;
+  padding: 0;
+}
+
+.checkbox-legend {
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+/* Grid layout */
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 20px;
+}
+
+/* ✅ PERFECT ALIGNMENT (FIXED) */
+.checkbox-grid label {
+  display: flex;
+  align-items: flex-start;        /* top aligned */
+  gap: 10px;
+  cursor: pointer;
+  line-height: 1.4;
+  padding: 6px 8px;
+  border-radius: 8px;
+}
+
+.checkbox-grid label:hover {
+  background: #f1f5f9;
+}
+
+/* ✅ CRITICAL FIX */
+.checkbox-grid input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #0f172a;
+  flex-shrink: 0;                 /* 🔥 PREVENT SHRINK */
+  margin-top: 2px;                /* subtle vertical balance */
+}
+
+/* BUTTON */
+.contact-form button {
+  width: 100%;
+  padding: 14px;
+  background: #0f172a;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .contact-container {
+    grid-template-columns: 1fr;
+  }
+
+  .checkbox-grid {
+    grid-template-columns: 1fr;
+  }
+}

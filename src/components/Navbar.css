@@ -1,0 +1,164 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* NAVBAR BASE */
+.navbar {
+  width: 100%;
+  padding: 22px 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* TRANSPARENT */
+.navbar.transparent {
+  background: transparent;
+}
+
+/* SCROLLED */
+.navbar.scrolled {
+  position: fixed;
+  background: #ffffff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* MENU OPEN */
+.navbar.menu-open {
+  background: #ffffff;
+}
+
+/* LOGO */
+.logo {
+  display: flex;
+  align-items: center;
+  margin-left: -18px;
+  color: white;
+}
+
+.logo img {
+  height: 52px;
+  transform: scale(2.3);
+  transform-origin: left center;
+  object-fit: contain;
+  transition: filter 0.3s ease;
+  filter: brightness(0) invert(1);
+}
+
+/* Logo color */
+.navbar.scrolled .logo img,
+.navbar.menu-open .logo img {
+  filter: brightness(0);
+}
+
+/* NAV LINKS */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+}
+
+.nav-link {
+  text-decoration: none;
+  font-size: 1.15rem;
+  font-weight: 500;
+  padding: 8px 4px;
+  transition: color 0.3s;
+}
+
+/* LINK COLORS */
+.navbar.transparent .nav-link {
+  color: white;
+}
+
+.navbar.scrolled .nav-link,
+.navbar.menu-open .nav-link {
+  color: #0f172a;
+}
+
+/* ACTIVE LINK */
+.nav-link.active {
+  text-decoration: underline;
+}
+
+/* CTA BUTTON */
+.btn-link {
+  padding: 14px 30px;
+  border-radius: 30px;
+  border: 2px solid black;
+  background: black;
+  color: white !important;
+  font-weight: 600;
+}
+
+/* HAMBURGER */
+.hamburger {
+  display: none;
+  font-size: 32px;
+  cursor: pointer;
+}
+
+.navbar.transparent .hamburger {
+  color: white;
+}
+
+.navbar.scrolled .hamburger,
+.navbar.menu-open .hamburger {
+  color: #0f172a;
+}
+
+/* MOBILE DROPDOWN */
+.mobile-dropdown {
+  width: 100%;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  padding: 26px 0 32px;
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* Mobile links */
+.mobile-dropdown .nav-link {
+  font-size: 1.25rem;
+  color: black;
+}
+
+/* Mobile CTA */
+.mobile-btn {
+  width: 80%;
+  text-align: center;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+  }
+
+  .hamburger {
+    display: block;
+  }
+
+  .navbar {
+    padding: 20px 24px;
+  }
+
+  .logo img {
+    transform: scale(1.7);
+  }
+
+  /* KEY FIX: allow menu to push content */
+  .navbar.menu-open {
+    position: relative;
+  }
+}
