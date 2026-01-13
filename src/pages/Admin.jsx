@@ -16,7 +16,7 @@ const Admin = () => {
   const [token, setToken] = useState(null);
 
   const API_BASE_URL =
-  (process.env.REACT_APP_API_URL || "http://localhost:5000") + "/api";
+  (process.env.REACT_APP_API_URL ) + "/api";
 
 
   // Fetch registered users

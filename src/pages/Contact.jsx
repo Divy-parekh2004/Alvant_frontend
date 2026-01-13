@@ -97,7 +97,7 @@ const Contact = () => {
     
     setLoading(true);
     try {
-      const apiBase = process.env.REACT_APP_API_URL || "http://localhost:5000";
+      const apiBase = process.env.REACT_APP_API_URL;
       const res = await fetch(`${apiBase}/api/contact`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
