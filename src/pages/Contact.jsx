@@ -97,7 +97,10 @@ const Contact = () => {
 
     setLoading(true);
     try {
-      const apiBase = import.meta.env.REACT_APP_API_URL;
+      const apiBase = process.env.REACT_APP_API_URL;
+      if (!apiBase) {
+        throw new Error("API base URL (REACT_APP_API_URL) is not configured");
+      }
       const res = await fetch(`${apiBase}/api/contact`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

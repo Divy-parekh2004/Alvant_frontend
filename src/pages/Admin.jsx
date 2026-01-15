@@ -15,13 +15,19 @@ const Admin = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [token, setToken] = useState(null);
 
-  const API_BASE_URL = import.meta.env.REACT_APP_API_URL + "/api";
+  const API_BASE_RAW = process.env.REACT_APP_API_URL;
+  const API_BASE_URL = API_BASE_RAW
+    ? `${API_BASE_RAW.replace(/\/$/, "")}/api`
+    : null;
 
   // Fetch registered users
   const fetchRegistered = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
+      if (!API_BASE_URL) {
+        throw new Error("API base URL (REACT_APP_API_URL) is not configured");
+      }
       const res = await fetch(`${API_BASE_URL}/register`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
@@ -41,6 +47,9 @@ const Admin = () => {
     setLoading(true);
     setError(null);
     try {
+      if (!API_BASE_URL) {
+        throw new Error("API base URL (REACT_APP_API_URL) is not configured");
+      }
       const res = await fetch(`${API_BASE_URL}/contact`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
@@ -74,6 +83,9 @@ const Admin = () => {
       setToken(saved);
       (async () => {
         try {
+          if (!API_BASE_URL) {
+            throw new Error("API base URL (REACT_APP_API_URL) is not configured");
+          }
           const res = await fetch(`${API_BASE_URL}/admin/verify-token`, {
             headers: { Authorization: `Bearer ${saved}` },
           });
