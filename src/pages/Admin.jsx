@@ -15,9 +15,7 @@ const Admin = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [token, setToken] = useState(null);
 
-  const API_BASE_URL =
-  (process.env.REACT_APP_API_URL ) + "/api";
-
+  const API_BASE_URL = import.meta.env.REACT_APP_API_URL + "/api";
 
   // Fetch registered users
   const fetchRegistered = useCallback(async () => {
@@ -25,7 +23,7 @@ const Admin = () => {
     setError(null);
     try {
       const res = await fetch(`${API_BASE_URL}/register`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {}
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
       if (!res.ok) throw new Error("Failed to fetch registered users");
       const data = await res.json();
@@ -44,7 +42,7 @@ const Admin = () => {
     setError(null);
     try {
       const res = await fetch(`${API_BASE_URL}/contact`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {}
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
       if (!res.ok) throw new Error("Failed to fetch contacted users");
       const data = await res.json();
@@ -69,33 +67,35 @@ const Admin = () => {
 
   // On mount, check stored token
   useEffect(() => {
-    const saved = localStorage.getItem('admin_token') || sessionStorage.getItem('admin_token');
+    const saved =
+      localStorage.getItem("admin_token") ||
+      sessionStorage.getItem("admin_token");
     if (saved) {
       setToken(saved);
       (async () => {
         try {
           const res = await fetch(`${API_BASE_URL}/admin/verify-token`, {
-            headers: { Authorization: `Bearer ${saved}` }
+            headers: { Authorization: `Bearer ${saved}` },
           });
-          
+
           // Check if response is JSON
-          const contentType = res.headers.get('content-type');
-          if (contentType && contentType.includes('application/json')) {
+          const contentType = res.headers.get("content-type");
+          if (contentType && contentType.includes("application/json")) {
             if (res.ok) {
               setIsAuthenticated(true);
             } else {
-              localStorage.removeItem('admin_token');
-              sessionStorage.removeItem('admin_token');
+              localStorage.removeItem("admin_token");
+              sessionStorage.removeItem("admin_token");
             }
           } else {
             // Server returned non-JSON response, likely an error page
-            localStorage.removeItem('admin_token');
-            sessionStorage.removeItem('admin_token');
+            localStorage.removeItem("admin_token");
+            sessionStorage.removeItem("admin_token");
           }
         } catch (err) {
           console.error(err);
-          localStorage.removeItem('admin_token');
-          sessionStorage.removeItem('admin_token');
+          localStorage.removeItem("admin_token");
+          sessionStorage.removeItem("admin_token");
         }
       })();
     }
@@ -125,11 +125,12 @@ const Admin = () => {
   const getFilteredRegistered = () => {
     if (!searchTerm) return registered;
 
-    return registered.filter((r) =>
-      r.companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      r.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      r.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      r.email.toLowerCase().includes(searchTerm.toLowerCase())
+    return registered.filter(
+      (r) =>
+        r.companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        r.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        r.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        r.email.toLowerCase().includes(searchTerm.toLowerCase())
     );
   };
 
@@ -137,94 +138,108 @@ const Admin = () => {
   const filteredContacted = getFilteredContacted();
 
   const handleLogout = () => {
-    localStorage.removeItem('admin_token');
-    sessionStorage.removeItem('admin_token');
+    localStorage.removeItem("admin_token");
+    sessionStorage.removeItem("admin_token");
     setToken(null);
     setIsAuthenticated(false);
     setRegistered([]);
     setContacted([]);
-    setEmail('');
-    setOtpInput('');
+    setEmail("");
+    setOtpInput("");
   };
 
   const handleSendOTP = async () => {
     setError(null);
-    if (!email) return setError('Enter your email address');
-    
+    if (!email) return setError("Enter your email address");
+
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email.trim())) {
-      return setError('Please enter a valid email address');
+      return setError("Please enter a valid email address");
     }
-    
+
     try {
       setLoading(true);
-      const res = await fetch(`${API_BASE_URL}/admin/request-otp`, { 
-        method: 'POST', 
-        headers: {'Content-Type':'application/json'}, 
-        body: JSON.stringify({ email: email.trim() }) 
+      const res = await fetch(`${API_BASE_URL}/admin/request-otp`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim() }),
       });
-      
+
       // Check if response is JSON
-      const contentType = res.headers.get('content-type');
-      if (!contentType || !contentType.includes('application/json')) {
+      const contentType = res.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
         const text = await res.text();
-        throw new Error(`Server error: ${res.status} ${res.statusText}. Please check if the server is running.`);
+        throw new Error(
+          `Server error: ${res.status} ${res.statusText}. Please check if the server is running.`
+        );
       }
-      
+
       const j = await res.json();
       if (!res.ok) {
-        const errorMsg = j.error || 'Failed to request OTP';
+        const errorMsg = j.error || "Failed to request OTP";
         throw new Error(errorMsg);
       }
-      alert('OTP sent to your email address. Check your inbox or the server console for the OTP code.');
+      alert(
+        "OTP sent to your email address. Check your inbox or the server console for the OTP code."
+      );
     } catch (err) {
       // Handle network errors
-      if (err.name === 'TypeError' && err.message.includes('fetch')) {
-        setError('Cannot connect to server. Please make sure the backend server is running.');
+      if (err.name === "TypeError" && err.message.includes("fetch")) {
+        setError(
+          "Cannot connect to server. Please make sure the backend server is running."
+        );
       } else {
-        setError(err.message || 'Failed to request OTP. Please check your connection and try again.');
+        setError(
+          err.message ||
+            "Failed to request OTP. Please check your connection and try again."
+        );
       }
-    } finally { 
-      setLoading(false); 
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleVerifyOTP = async () => {
     setError(null);
-    if (!email || !otpInput) return setError('Provide email address and OTP');
+    if (!email || !otpInput) return setError("Provide email address and OTP");
     try {
       setLoading(true);
-      const res = await fetch(`${API_BASE_URL}/admin/verify-otp`, { 
-        method: 'POST', 
-        headers: {'Content-Type':'application/json'}, 
-        body: JSON.stringify({ email, otp: otpInput, remember }) 
+      const res = await fetch(`${API_BASE_URL}/admin/verify-otp`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, otp: otpInput, remember }),
       });
-      
+
       // Check if response is JSON
-      const contentType = res.headers.get('content-type');
-      if (!contentType || !contentType.includes('application/json')) {
+      const contentType = res.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
         const text = await res.text();
-        throw new Error(`Server error: ${res.status} ${res.statusText}. Please check if the server is running.`);
+        throw new Error(
+          `Server error: ${res.status} ${res.statusText}. Please check if the server is running.`
+        );
       }
-      
+
       const j = await res.json();
-      if (!res.ok) throw new Error(j.error || 'Failed to verify OTP');
+      if (!res.ok) throw new Error(j.error || "Failed to verify OTP");
       const t = j.token;
-      if (remember) localStorage.setItem('admin_token', t); 
-      else sessionStorage.setItem('admin_token', t);
+      if (remember) localStorage.setItem("admin_token", t);
+      else sessionStorage.setItem("admin_token", t);
       setToken(t);
       setIsAuthenticated(true);
-      setEmail('');
-      setOtpInput('');
+      setEmail("");
+      setOtpInput("");
       setTimeout(() => {
-        if (section === 'registered') fetchRegistered(); 
+        if (section === "registered") fetchRegistered();
         else fetchContacted();
       }, 300);
     } catch (err) {
-      setError(err.message || 'Failed to verify OTP. Please check your connection and try again.');
-    } finally { 
-      setLoading(false); 
+      setError(
+        err.message ||
+          "Failed to verify OTP. Please check your connection and try again."
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -233,10 +248,11 @@ const Admin = () => {
       <div className="admin-header">
         <div>
           <h1>Admin Dashboard</h1>
-         
         </div>
         {isAuthenticated && (
-          <button className="logout-btn" onClick={handleLogout}>Logout</button>
+          <button className="logout-btn" onClick={handleLogout}>
+            Logout
+          </button>
         )}
       </div>
 
@@ -247,45 +263,49 @@ const Admin = () => {
         {!isAuthenticated ? (
           <section className="panel admin-login-panel">
             <h2>Admin Login</h2>
-            
+
             <div className="login-form-group">
               <label>Email Address</label>
-              <input 
-                type="email" 
+              <input
+                type="email"
                 placeholder="email"
-                value={email} 
-                onChange={(e) => setEmail(e.target.value)} 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
             <div className="login-actions">
-              <button className="btn" onClick={handleSendOTP}>Send OTP</button>
+              <button className="btn" onClick={handleSendOTP}>
+                Send OTP
+              </button>
             </div>
 
             <div className="otp-section">
               <div className="login-form-group">
                 <label>Enter OTP</label>
-                <input 
-                  type="text" 
-                  placeholder="6-digit OTP" 
-                  value={otpInput} 
-                  onChange={(e) => setOtpInput(e.target.value)} 
+                <input
+                  type="text"
+                  placeholder="6-digit OTP"
+                  value={otpInput}
+                  onChange={(e) => setOtpInput(e.target.value)}
                   maxLength="6"
                 />
               </div>
 
               <div className="remember-me">
-                <input 
-                  type="checkbox" 
-                  id="remember" 
-                  checked={remember} 
-                  onChange={(e) => setRemember(e.target.checked)} 
+                <input
+                  type="checkbox"
+                  id="remember"
+                  checked={remember}
+                  onChange={(e) => setRemember(e.target.checked)}
                 />
                 <label htmlFor="remember">Keep me logged in for 30 days</label>
               </div>
 
               <div className="login-actions">
-                <button className="btn" onClick={handleVerifyOTP}>Verify & Login</button>
+                <button className="btn" onClick={handleVerifyOTP}>
+                  Verify & Login
+                </button>
               </div>
             </div>
           </section>
@@ -294,9 +314,16 @@ const Admin = () => {
             <div className="admin-controls">
               <label className="select-wrap">
                 View:
-                <select value={section} onChange={(e) => setSection(e.target.value)}>
-                  <option value="registered">Registered Users ({registered.length})</option>
-                  <option value="contacted">Contacted Users ({contacted.length})</option>
+                <select
+                  value={section}
+                  onChange={(e) => setSection(e.target.value)}
+                >
+                  <option value="registered">
+                    Registered Users ({registered.length})
+                  </option>
+                  <option value="contacted">
+                    Contacted Users ({contacted.length})
+                  </option>
                 </select>
               </label>
             </div>
@@ -311,7 +338,9 @@ const Admin = () => {
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
-                    <button className="btn" onClick={fetchRegistered}>Refresh</button>
+                    <button className="btn" onClick={fetchRegistered}>
+                      Refresh
+                    </button>
                   </div>
                 </div>
 
@@ -335,7 +364,9 @@ const Admin = () => {
                       {filteredRegistered.length === 0 ? (
                         <tr className="empty-row">
                           <td colSpan="10">
-                            {searchTerm ? "No results found." : "No registered users found."}
+                            {searchTerm
+                              ? "No results found."
+                              : "No registered users found."}
                           </td>
                         </tr>
                       ) : (
@@ -366,7 +397,10 @@ const Admin = () => {
                     <div className="filters">
                       <label>
                         Filter:
-                        <select value={contactFilter} onChange={(e) => setContactFilter(e.target.value)}>
+                        <select
+                          value={contactFilter}
+                          onChange={(e) => setContactFilter(e.target.value)}
+                        >
                           <option value="today">Today</option>
                           <option value="week">Last 7 days</option>
                           <option value="month">Last 30 days</option>
@@ -374,7 +408,9 @@ const Admin = () => {
                         </select>
                       </label>
                     </div>
-                    <button className="btn" onClick={fetchContacted}>Refresh</button>
+                    <button className="btn" onClick={fetchContacted}>
+                      Refresh
+                    </button>
                   </div>
                 </div>
 

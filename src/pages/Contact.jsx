@@ -33,77 +33,79 @@ const Contact = () => {
   // Validation functions
   const validateName = (value) => {
     if (!value || !value.trim()) {
-      return 'Name is required';
+      return "Name is required";
     }
     if (value.trim().length < 2) {
-      return 'Name must be at least 2 characters long';
+      return "Name must be at least 2 characters long";
     }
-    return '';
+    return "";
   };
 
   const validateEmail = (value) => {
     if (!value || !value.trim()) {
-      return 'Email is required';
+      return "Email is required";
     }
     const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRe.test(value.trim())) {
-      return 'Please provide a valid email address';
+      return "Please provide a valid email address";
     }
-    return '';
+    return "";
   };
 
   const validatePhone = (value) => {
     if (!value || !value.trim()) {
-      return 'Phone number is required';
+      return "Phone number is required";
     }
     const phoneRe = /^[\d\s\-\+\(\)]+$/;
     if (!phoneRe.test(value.trim())) {
-      return 'Please provide a valid phone number';
+      return "Please provide a valid phone number";
     }
-    const digitsOnly = value.trim().replace(/\D/g, '');
+    const digitsOnly = value.trim().replace(/\D/g, "");
     if (digitsOnly.length < 10) {
-      return 'Phone number must contain at least 10 digits';
+      return "Phone number must contain at least 10 digits";
     }
-    return '';
+    return "";
   };
 
   const validateCategories = (cats) => {
     if (!Array.isArray(cats) || cats.length === 0) {
-      return 'Please select at least one category';
+      return "Please select at least one category";
     }
-    return '';
+    return "";
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
-    
+
     // Client-side validation
     const newErrors = {};
     const nameError = validateName(name);
     const emailError = validateEmail(email);
     const phoneError = validatePhone(phone);
     const categoriesError = validateCategories(categories);
-    
+
     if (nameError) newErrors.name = nameError;
     if (emailError) newErrors.email = emailError;
     if (phoneError) newErrors.phone = phoneError;
     if (categoriesError) newErrors.categories = categoriesError;
-    
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-    
+
     setLoading(true);
     try {
-      const apiBase = process.env.REACT_APP_API_URL;
+      const apiBase = import.meta.env.REACT_APP_API_URL;
       const res = await fetch(`${apiBase}/api/contact`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, phone, message, categories }),
       }).catch((fetchErr) => {
-        throw new Error("Network error: Unable to connect to server. Please check your connection.");
+        throw new Error(
+          "Network error: Unable to connect to server. Please check your connection."
+        );
       });
 
       let body;
@@ -115,18 +117,22 @@ const Contact = () => {
 
       if (!res.ok) {
         // Handle database connection errors
-        if (res.status === 503 && body.error === 'Database not connected') {
-          throw new Error('Database connection error. Please check if MongoDB is configured and running.');
+        if (res.status === 503 && body.error === "Database not connected") {
+          throw new Error(
+            "Database connection error. Please check if MongoDB is configured and running."
+          );
         }
         // Handle validation errors from backend
-        if (body.errors && typeof body.errors === 'object') {
+        if (body.errors && typeof body.errors === "object") {
           setErrors(body.errors);
           const errorMsg = body.error || "Please correct the errors below";
           throw new Error(errorMsg);
         }
         // Handle other errors
         const errorMsg = body.error || body.details || "Failed to submit";
-        throw new Error(Array.isArray(errorMsg) ? errorMsg.join(", ") : errorMsg);
+        throw new Error(
+          Array.isArray(errorMsg) ? errorMsg.join(", ") : errorMsg
+        );
       }
 
       alert("Thanks — your message was sent.");
@@ -139,7 +145,10 @@ const Contact = () => {
     } catch (err) {
       console.error("Contact form submission error:", err);
       if (!errors || Object.keys(errors).length === 0) {
-        alert(err.message || "There was an error sending your message. Please try again.");
+        alert(
+          err.message ||
+            "There was an error sending your message. Please try again."
+        );
       }
     } finally {
       setLoading(false);
@@ -162,7 +171,6 @@ const Contact = () => {
       {/* CONTACT SECTION */}
       <section className="contact-section">
         <div className="contact-container">
-
           {/* LEFT INFO */}
           <div className="contact-info">
             <h2>Contact Information</h2>
@@ -193,7 +201,9 @@ const Contact = () => {
             <h2>Send Us a Message</h2>
 
             <div className="form-row">
-              <label className="form-label">Name <span className="req">*</span></label>
+              <label className="form-label">
+                Name <span className="req">*</span>
+              </label>
               <input
                 type="text"
                 placeholder="Enter Your Name"
@@ -203,20 +213,25 @@ const Contact = () => {
                   setName(e.target.value);
                   if (errors.name) {
                     const error = validateName(e.target.value);
-                    setErrors(prev => ({ ...prev, name: error || undefined }));
+                    setErrors((prev) => ({
+                      ...prev,
+                      name: error || undefined,
+                    }));
                   }
                 }}
                 onBlur={(e) => {
                   const error = validateName(e.target.value);
-                  setErrors(prev => ({ ...prev, name: error || undefined }));
+                  setErrors((prev) => ({ ...prev, name: error || undefined }));
                 }}
-                className={errors.name ? 'error' : ''}
+                className={errors.name ? "error" : ""}
               />
               {errors.name && <div className="field-error">{errors.name}</div>}
             </div>
 
             <div className="form-row">
-              <label className="form-label">Email <span className="req">*</span></label>
+              <label className="form-label">
+                Email <span className="req">*</span>
+              </label>
               <input
                 type="email"
                 placeholder="Enter Your Email"
@@ -226,20 +241,27 @@ const Contact = () => {
                   setEmail(e.target.value);
                   if (errors.email) {
                     const error = validateEmail(e.target.value);
-                    setErrors(prev => ({ ...prev, email: error || undefined }));
+                    setErrors((prev) => ({
+                      ...prev,
+                      email: error || undefined,
+                    }));
                   }
                 }}
                 onBlur={(e) => {
                   const error = validateEmail(e.target.value);
-                  setErrors(prev => ({ ...prev, email: error || undefined }));
+                  setErrors((prev) => ({ ...prev, email: error || undefined }));
                 }}
-                className={errors.email ? 'error' : ''}
+                className={errors.email ? "error" : ""}
               />
-              {errors.email && <div className="field-error">{errors.email}</div>}
+              {errors.email && (
+                <div className="field-error">{errors.email}</div>
+              )}
             </div>
 
             <div className="form-row">
-              <label className="form-label">WhatsApp Number <span className="req">*</span></label>
+              <label className="form-label">
+                WhatsApp Number <span className="req">*</span>
+              </label>
               <input
                 type="tel"
                 placeholder="Enter WhatsApp Number (e.g., +91 1234567890)"
@@ -249,21 +271,28 @@ const Contact = () => {
                   setPhone(e.target.value);
                   if (errors.phone) {
                     const error = validatePhone(e.target.value);
-                    setErrors(prev => ({ ...prev, phone: error || undefined }));
+                    setErrors((prev) => ({
+                      ...prev,
+                      phone: error || undefined,
+                    }));
                   }
                 }}
                 onBlur={(e) => {
                   const error = validatePhone(e.target.value);
-                  setErrors(prev => ({ ...prev, phone: error || undefined }));
+                  setErrors((prev) => ({ ...prev, phone: error || undefined }));
                 }}
-                className={errors.phone ? 'error' : ''}
+                className={errors.phone ? "error" : ""}
               />
-              {errors.phone && <div className="field-error">{errors.phone}</div>}
+              {errors.phone && (
+                <div className="field-error">{errors.phone}</div>
+              )}
             </div>
 
             {/* CHECKBOXES */}
             <fieldset className="checkbox-group">
-              <legend className="checkbox-legend">Select Categories <span className="req">*</span></legend>
+              <legend className="checkbox-legend">
+                Select Categories <span className="req">*</span>
+              </legend>
 
               <div className="checkbox-grid">
                 {categoriesList.map((item) => (
@@ -274,20 +303,24 @@ const Contact = () => {
                       onChange={() => {
                         toggleCategory(item);
                         if (errors.categories) {
-                          const newCats = categories.includes(item) 
-                            ? categories.filter(c => c !== item)
+                          const newCats = categories.includes(item)
+                            ? categories.filter((c) => c !== item)
                             : [...categories, item];
                           const error = validateCategories(newCats);
-                          setErrors(prev => ({ ...prev, categories: error || undefined }));
+                          setErrors((prev) => ({
+                            ...prev,
+                            categories: error || undefined,
+                          }));
                         }
                       }}
-                    />
-                    {" "}
+                    />{" "}
                     {item}
                   </label>
                 ))}
               </div>
-              {errors.categories && <div className="field-error">{errors.categories}</div>}
+              {errors.categories && (
+                <div className="field-error">{errors.categories}</div>
+              )}
             </fieldset>
 
             <div className="form-row">
@@ -301,9 +334,10 @@ const Contact = () => {
               />
             </div>
 
-            <button type="submit" disabled={loading}>{loading ? 'Sending...' : 'Submit'}</button>
+            <button type="submit" disabled={loading}>
+              {loading ? "Sending..." : "Submit"}
+            </button>
           </form>
-
         </div>
       </section>
     </>
