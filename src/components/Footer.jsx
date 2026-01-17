@@ -1,6 +1,7 @@
 import "./Footer.css";
 import { NavLink } from "react-router-dom";
 
+
 const Footer = () => {
   return (
     <footer className="footer">
@@ -57,7 +58,7 @@ const Footer = () => {
               rel="noopener noreferrer"
               style={{ textDecoration: "none" }}
             >
-              💬 WhatsApp Us
+               WhatsApp Us
             </a>
           </p>
           <p>
@@ -65,14 +66,6 @@ const Footer = () => {
           </p>
 
           <p>Location: India</p>
-        </div>
-
-        {/* TEAM */}
-        <div className="footer-col">
-          <h4>Our Team</h4>
-          <p>Malav Thakkar (CEO)</p>
-          <p>Ved Patel (CTO)</p>
-          <p>Neel Patel (MD)</p>
         </div>
       </div>
 

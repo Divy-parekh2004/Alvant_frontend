@@ -1,6 +1,8 @@
 import "./Contact.css";
 import heroImg from "../assets/contactusbg.jpg";
 import { useState } from "react";
+import Footer from "../components/Footer";
+import { Phone } from 'lucide-react';
 
 const categoriesList = [
   "Grains",
@@ -189,8 +191,7 @@ const Contact = () => {
 
             <div className="info-item">
               <strong>Phone:</strong>
-              <span>CEO: +91 9054871775</span>
-              <span>CTO: +91 9773297483</span>
+              <span><Phone size={16} style={{marginRight: 5}}/>: +91 9054871775</span>
             </div>
 
             <div className="info-item">
@@ -343,6 +344,7 @@ const Contact = () => {
           </form>
         </div>
       </section>
+      <Footer />
     </>
   );
 };
