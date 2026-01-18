@@ -181,7 +181,7 @@ const Admin = () => {
       // Check if response is JSON
       const contentType = res.headers.get("content-type");
       if (!contentType || !contentType.includes("application/json")) {
-        const text = await res.text();
+        // const text = await res.text();
         throw new Error(
           `Server error: ${res.status} ${res.statusText}. Please check if the server is running.`
         );
@@ -226,7 +226,7 @@ const Admin = () => {
       // Check if response is JSON
       const contentType = res.headers.get("content-type");
       if (!contentType || !contentType.includes("application/json")) {
-        const text = await res.text();
+        // const text = await res.text();
         throw new Error(
           `Server error: ${res.status} ${res.statusText}. Please check if the server is running.`
         );

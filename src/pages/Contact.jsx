@@ -58,7 +58,8 @@ const Contact = () => {
     if (!value || !value.trim()) {
       return "Phone number is required";
     }
-    const phoneRe = /^[\d\s\-\+\(\)]+$/;
+    // const phoneRe = /^[\d\s\-\+\(\)]+$/;
+    const phoneRe = /\(\+91\)\d{10}/;
     if (!phoneRe.test(value.trim())) {
       return "Please provide a valid phone number";
     }
